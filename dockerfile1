@@ -1,0 +1,14 @@
+ARG VERSION=20.04
+FROM ubuntu:${VERSION}
+LABEL enviroment=production
+RUN apt update && apt install -y nginx curl
+WORKDIR /usr/share/nginx/html
+COPY index.html
+ENV MYSQL_ROOT_PASSWORD=test12345
+WORKDIR /var/www/html
+ADD index.html .
+WORKDIR /
+VOLUME /var/www/html
+EXPOSE 80
+CMD ["nginx", "-g", "deamon off;"]
+HEALTHCHECK CMD Curl --fail https://localhost:80/ || exit 1
